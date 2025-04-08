@@ -6,12 +6,12 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Reusable handler functions
 const useDishActions = (router) => {
-  const handleViewNutrition = (id) => {
-    router.push(`/NutrientPage?id=${id}`);
+  const handleViewNutrition = (id, title) => {
+    router.push(`/NutrientPage?id=${id}&title=${encodeURIComponent(title)}`);
   };
 
-  const handleViewRecipe = (id) => {
-    router.push(`/InstructionPage?id=${id}`);
+  const handleViewRecipe = (id, title) => {
+    router.push(`/InstructionPage?id=${id}&title=${encodeURIComponent(title)}`);
   };
 
   const handleSaveDish = (dishId) => {
@@ -40,8 +40,8 @@ const DishCard = ({ dish, onViewNutrition, onViewRecipe, onSaveDish }) => (
             <h2>{dish.title}</h2>
         </div>
         <div>
-            <button onClick={() => onViewNutrition(dish.id)}>View Nutrition</button>
-            <button onClick={() => onViewRecipe(dish.id)}>View Instruction</button>
+            <button onClick={() => onViewNutrition(dish.id, dish.title)}>View Nutrition</button>
+            <button onClick={() => onViewRecipe(dish.id, dish.title)}>View Instruction</button>
             <button onClick={() => onSaveDish(dish.id)}>Save Dish</button>
         </div>
     </div>
