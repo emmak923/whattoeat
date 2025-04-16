@@ -1,75 +1,78 @@
-import { useRouter } from "next/router";
-import fetchAPI from "./components/fetchAPI";
-import styles from "../styles/Instruction.module.css";
-import { useState, useEffect} from "react";
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #95c8d8;
+  position: sticky; /* Keeps the navbar visible at the top while scrolling */
+  top: 0;
+  width: 100%;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+}
 
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+.nav-left, .nav-center, .nav-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
 
-export default function ViewRecipe() {
-    const router = useRouter();
-    const { id, title, image } = router.query;
-    const [dishCount, setDishCount] = useState(0);
+.nav-left {
+  justify-content: flex-start;
+  font-size: 0.9rem;
+}
 
-    const INSTRUCTION_API_URL = id ? `${BASE_URL}/${id}/analyzedInstructions?apiKey=${API_KEY}` : null;
-    const { data: recipe, loading: loading, error: error } = fetchAPI(INSTRUCTION_API_URL);
+.nav-center {
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 
-    // Load favorite dishes count
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const saved = JSON.parse(localStorage.getItem("favoriteDishes")) || [];
-            setDishCount(saved.length);
-        }
-    }, []);
+.nav-right {
+  justify-content: flex-end;
+  gap: 10px;
+}
 
-    return (
-      <>
-        <div className={styles.navbar}>
-            <div className={styles["nav-left"]}>
-                <button onClick={() => router.push("/")}>Home</button>
-            </div>
-            <div className={styles["nav-center"]}>
-                WhatToEat?
-            </div>
-            <div className={styles["nav-right"]}>
-                <button onClick={() => router.push("/FavoriteDishesPage")}>My List ({dishCount})</button>
-            </div>
-        </div>
-        <div className={styles.container}>
+.navbar button {
+  cursor: pointer;
+  background-color: #fdfdfd;
+  border: none;               
+  padding: 10px 20px;         
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
 
-            {loading ? (
-                <p>Loading...</p>
-            ) : error ? (
-                <p>Error: {error}</p>
-            ) : (
-                id && title && (
-                    <div className={styles.header}>
-                        <h1>{title}</h1>
-                        <img src={image} alt={title} style={{ width: "200px" }} />
-                    </div>
-                )
-            )}
+.navbar button:hover {
+  background-color: lightgray;
+}
 
-            {recipe && recipe.length > 0 ? (
-                recipe.map((section, sectionIndex) => (
-                    <div key={sectionIndex} className={styles["recipe-section"]}>
-                        <h3>{section.name || "Cooking Instructions"}</h3>
-                        {section.steps.map((step) => (
-                            <div key={step.number}>
-                                <h4 className={styles["step-number"]}>Step {step.number}</h4>
-                                <p className={styles["step-text"]}>{step.step}</p>
-                            </div>
-                        ))}
-                    </div>
-                ))
-            ) : (
-                <p>No recipe instructions available.</p>
-            )}
-            <br />
-            <button onClick={() => router.push(`/NutrientPage?id=${id}&title=${title}&image=${image}`)}>
-                View Nutrition
-            </button>
-        </div>
-      </>
-    );
+.navbar h2 {
+  margin: 0;
+}
+
+.container {
+  padding: 0px, 20px;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  padding: 20px;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  justify-content: center;
+  text-align: center;   
+}
+
+.container button {
+  background-color: #ff9800;
+  color: white;               
+  border: none;               
+  padding: 10px 20px;         
+  border-radius: 4px;         
+  font-size: 14px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.container button:hover {
+  background-color: #e68900
 }
